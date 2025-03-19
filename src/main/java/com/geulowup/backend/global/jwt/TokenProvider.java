@@ -1,18 +1,17 @@
 package com.geulowup.backend.global.jwt;
 
 import com.geulowup.backend.domain.user.entity.User;
+import com.geulowup.backend.global.security.CustomUserDetailsService;
+import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import io.jsonwebtoken.*;
 import jakarta.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.time.Duration;
-import java.util.Collections;
 import java.util.Date;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class TokenProvider {
     private final JwtProperties jwtProperties;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    //private final UserAuthInfoService userAuthInfoService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     private Key createSecretKey() {
         byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(jwtProperties.getSecretKey());
@@ -62,11 +61,7 @@ public class TokenProvider {
     public Authentication getAuthentication(String token) {
         Claims claims = getClaims(token);
         String email = claims.getSubject();
-        //TODO: OAuth 2.0 기반 인증으로 변경
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                email, "",
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER")));
-        //UserAuthInfo userDetails = (UserAuthInfo) userAuthInfoService.loadUserByUsername(email);
+        CustomOAuth2User userDetails = (CustomOAuth2User) customUserDetailsService.loadUserByUsername(email);
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails,
