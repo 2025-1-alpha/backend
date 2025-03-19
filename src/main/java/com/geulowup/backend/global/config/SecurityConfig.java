@@ -2,6 +2,9 @@ package com.geulowup.backend.global.config;
 
 import com.geulowup.backend.global.jwt.TokenAuthenticationFilter;
 import com.geulowup.backend.global.jwt.TokenProvider;
+import com.geulowup.backend.global.security.oauth2.CustomOAuth2UserService;
+import com.geulowup.backend.global.security.oauth2.OAuth2AuthenticationFailureHandler;
+import com.geulowup.backend.global.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,8 +28,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     @Value("${cors.allowed-origins}")
     private String[] allowedOrigins;
-
     private final TokenProvider tokenProvider;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     private static final String[] SWAGGER_API_PATH = {
             //swagger
@@ -44,6 +49,19 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorization -> authorization
+                                .baseUri("/oauth2/authorization")
+                        )
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/*/oauth2/code/*")
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler)
+                )
                 .cors((cors) -> cors.configurationSource(apiConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
@@ -51,7 +69,6 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((httpRequests) ->
                         httpRequests
-                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers(SWAGGER_API_PATH).permitAll()
                                 .anyRequest().authenticated()
                 )
