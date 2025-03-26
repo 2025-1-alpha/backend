@@ -13,6 +13,7 @@ public record CurrentUserInfoResponse(
         String profileImageUrl,
         LocalDateTime createdAt
 ) {
+
     public static CurrentUserInfoResponse from(User user) {
         return CurrentUserInfoResponse.builder()
                 .userId(user.getId())
