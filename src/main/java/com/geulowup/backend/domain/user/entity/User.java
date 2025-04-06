@@ -1,8 +1,11 @@
 package com.geulowup.backend.domain.user.entity;
 
+import com.geulowup.backend.domain.user.enums.SocialType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -38,8 +41,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "social_id", nullable = false, unique = true)
     private String socialId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "social_type", nullable = false)
+    private SocialType socialType;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;

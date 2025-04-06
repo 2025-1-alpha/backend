@@ -1,6 +1,7 @@
 package com.geulowup.backend.global.security.oauth2;
 
 import com.geulowup.backend.domain.user.entity.User;
+import com.geulowup.backend.domain.user.enums.SocialType;
 import com.geulowup.backend.domain.user.repository.UserRepository;
 import com.geulowup.backend.global.jwt.TokenProvider;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
@@ -27,20 +28,22 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         CustomOAuth2User oAuth2User = (CustomOAuth2User) authentication.getPrincipal();
-        String kakaoUserId = oAuth2User.getAttributes().get("id").toString();
-        User user = userRepository.findBySocialId(kakaoUserId)
+        String socialId = oAuth2User.getSocialId();
+        SocialType socialType = oAuth2User.getSocialType();
+        User user = userRepository.findBySocialIdAndSocialType(socialId, socialType)
                 .orElseGet(() -> {
                     User newUser = User.builder()
-                            .socialId(kakaoUserId)
+                            .socialId(socialId)
                             .name(oAuth2User.getName())
                             .email(oAuth2User.getEmail())
+                            .socialType(socialType)
                             .score(0)
                             .build();
                     return userRepository.save(newUser);
                 });
 
         String accessToken = tokenProvider.generateToken(user, Duration.ofDays(30));
-        getRedirectStrategy().sendRedirect(request, response, getRedirectUrl(loginRedirectUri, accessToken));
+        getRedirectStrategy().sendRedirect(request, response, getRedirectUrl(loginRedirectUri + "/callback", accessToken));
     }
 
     private String getRedirectUrl(String targetUrl, String token) {
