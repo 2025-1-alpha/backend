@@ -1,5 +1,6 @@
 package com.geulowup.backend.global.security.oauth2.dto;
 
+import com.geulowup.backend.domain.user.enums.SocialType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,10 +16,12 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
     private final Map<String, Object> attributes;
     private final Collection<? extends GrantedAuthority> authorities;
+    private final SocialType socialType;
 
-    public CustomOAuth2User(OAuth2User user) {
+    public CustomOAuth2User(OAuth2User user, SocialType socialType) {
         this.attributes = user.getAttributes();
         this.authorities = user.getAuthorities();
+        this.socialType = socialType;
     }
 
     public CustomOAuth2User(Long userId) {
@@ -26,6 +29,7 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
         map.put("userId", userId);
         this.attributes = map;
         this.authorities = Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"));
+        this.socialType = SocialType.UNKNOWN;
     }
 
     @Override
@@ -70,15 +74,10 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
 
     @Override
     public String getName() {
-        HashMap<String, String> map = (HashMap) attributes.get("properties");
-        if (map == null) return "";
-        return map.get("nickname");
-    }
-
-    public String getProfileImageUrl() {
-        HashMap<String, String> map = (HashMap) attributes.get("properties");
-        if (map == null) return "";
-        return map.get("profile_image_url");
+//        HashMap<String, String> map = (HashMap) attributes.get("properties");
+//        if (map == null) return "";
+//        return map.get("nickname");
+        return getSocialName();
     }
 
     public Long getUserId() {
@@ -86,8 +85,28 @@ public class CustomOAuth2User implements OAuth2User, UserDetails {
     }
 
     public String getEmail() {
-        HashMap<String, String> map = (HashMap) attributes.get("kakao_account");
-        if (map == null) return "";
-        return map.get("email");
+        return "";
     }
+
+    public String getSocialName() {
+        return "";
+    }
+
+    public String getSocialId() {
+        return "";
+    }
+
+//    public String getProfileImageUrl() {
+//        HashMap<String, String> map = (HashMap) attributes.get("properties");
+//        if (map == null) return "";
+//        return map.get("profile_image_url");
+//    }
+//
+//
+//    public String getEmail() {
+//        HashMap<String, String> map = (HashMap) attributes.get("kakao_account");
+//        if (map == null)
+//            return "";
+//        return map.get("email");
+//    }
 }
