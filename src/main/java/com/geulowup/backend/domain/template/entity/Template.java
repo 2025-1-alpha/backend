@@ -10,6 +10,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -50,9 +52,17 @@ public class Template {
     private String keywords;
 
     @Column(name = "is_private", nullable = false, columnDefinition = "TINYINT(1)")
-    private Boolean isPrivate = false;
+    private boolean isPrivate = false;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    public void updateTemplate(String title, String content, int likeCount, List<String> keywords, boolean isPrivate) {
+        this.title = title;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.keywords = String.join(",", keywords);
+        this.isPrivate = isPrivate;
+    }
 }
