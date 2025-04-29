@@ -1,4 +1,4 @@
-package com.geulowup.backend.domain.user.dto;
+package com.geulowup.backend.domain.user.dto.response;
 
 import com.geulowup.backend.domain.user.entity.User;
 import lombok.Builder;

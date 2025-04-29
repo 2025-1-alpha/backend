@@ -1,5 +1,8 @@
 package com.geulowup.backend.domain.template.service;
 
+import com.geulowup.backend.domain.template.dto.AuthorDetail;
+import com.geulowup.backend.domain.template.dto.TemplateAuthorInfoResponse;
+import com.geulowup.backend.domain.template.dto.TemplateDetail;
 import com.geulowup.backend.domain.template.dto.TemplateFindAllResponse;
 import com.geulowup.backend.domain.template.dto.TemplateRequest;
 import com.geulowup.backend.domain.template.dto.TemplateSummary;
@@ -42,10 +45,12 @@ public class TemplateService {
 
     @Transactional
     public void updateTemplate(Long userId, Long templateId, TemplateRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
+        if (!template.isAuthor(userId)) {
+            throw new ApiException(TemplateErrorCode.TEMPLATE_ACCESS_DENIED);
+        }
 
         template.updateTemplate(
                 request.title(),
@@ -54,7 +59,6 @@ public class TemplateService {
                 request.keywords(),
                 request.isPrivate()
         );
-        templateRepository.save(template);
     }
 
     public TemplateFindAllResponse getAllTemplates() {
@@ -65,6 +69,56 @@ public class TemplateService {
 
         return TemplateFindAllResponse.builder()
                 .templates(templates)
+                .build();
+    }
+
+    @Transactional
+    public void deleteTemplateById(Long userId, Long templateId) {
+        Template template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
+        if (!template.isAuthor(userId)) {
+            throw new ApiException(TemplateErrorCode.TEMPLATE_ACCESS_DENIED);
+        }
+
+        templateRepository.delete(template);
+    }
+
+    public TemplateDetail getTemplateById(Long userId, Long templateId) {
+        Template template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
+        return TemplateDetail.from(template, userId);
+    }
+
+    public TemplateFindAllResponse getRecommendedTemplates(boolean summary) {
+        List<Template> templates = (summary) ? templateRepository.findTop5ByOrderByLikeCountDesc()
+                : templateRepository.findAllByOrderByLikeCountDesc();
+
+        return TemplateFindAllResponse
+                .builder()
+                .templates(
+                        templates.stream()
+                                .map(TemplateSummary::from)
+                                .toList()
+                )
+                .build();
+    }
+
+    public TemplateAuthorInfoResponse getTemplateAuthorInfo(Long templateId) {
+        Template currentTemplate = templateRepository.findById(templateId)
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+        List<Template> templates = templateRepository.findAllByAuthorOrderByLikeCountDesc(
+                currentTemplate.getAuthor());
+
+        return TemplateAuthorInfoResponse.builder()
+                .author(AuthorDetail.from(currentTemplate.getAuthor()))
+                .templateTotalCount(templates.size())
+                .templates(templates
+                        .stream()
+                        .map(TemplateSummary::from)
+                        .toList()
+                )
                 .build();
     }
 }

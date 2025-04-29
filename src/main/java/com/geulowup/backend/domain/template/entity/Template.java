@@ -65,4 +65,8 @@ public class Template {
         this.keywords = String.join(",", keywords);
         this.isPrivate = isPrivate;
     }
+
+    public boolean isAuthor(Long userId) {
+        return author.getId().equals(userId);
+    }
 }

@@ -1,7 +1,7 @@
 package com.geulowup.backend.domain.user.service;
 
-import com.geulowup.backend.domain.user.dto.CurrentUserInfoResponse;
-import com.geulowup.backend.domain.user.dto.UserNicknameUpdateRequest;
+import com.geulowup.backend.domain.user.dto.response.CurrentUserInfoResponse;
+import com.geulowup.backend.domain.user.dto.request.UserNicknameUpdateRequest;
 import com.geulowup.backend.domain.user.entity.User;
 import com.geulowup.backend.domain.user.exception.UserErrorCode;
 import com.geulowup.backend.domain.user.repository.UserRepository;
