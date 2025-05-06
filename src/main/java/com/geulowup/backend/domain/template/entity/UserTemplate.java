@@ -1,7 +1,6 @@
 package com.geulowup.backend.domain.template.entity;
 
 import com.geulowup.backend.domain.user.entity.User;
-import com.geulowup.backend.domain.user.entity.UserTemplateFolder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

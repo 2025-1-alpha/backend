@@ -1,4 +1,4 @@
-package com.geulowup.backend.domain.template.dto;
+package com.geulowup.backend.domain.template.dto.request;
 
 
 

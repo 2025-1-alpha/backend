@@ -1,4 +1,4 @@
-package com.geulowup.backend.domain.template.dto;
+package com.geulowup.backend.domain.template.dto.response;
 
 import com.geulowup.backend.domain.template.entity.Template;
 import lombok.Builder;
