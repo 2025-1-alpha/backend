@@ -1,5 +1,6 @@
 package com.geulowup.backend.domain.user.service;
 
+import com.geulowup.backend.domain.user.dto.request.SignupRequest;
 import com.geulowup.backend.domain.user.dto.response.CurrentUserInfoResponse;
 import com.geulowup.backend.domain.user.dto.request.UserNicknameUpdateRequest;
 import com.geulowup.backend.domain.user.entity.User;
@@ -63,5 +64,13 @@ public class UserService {
         String newFileDir = "profiles/" + userId;
 
         return s3Service.uploadFile(file, newFileDir);
+    }
+
+    @Transactional
+    public void signUp(Long userId, SignupRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+
+        user.signUp(request.job(), request.tags());
     }
 }

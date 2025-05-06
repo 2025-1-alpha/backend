@@ -1,5 +1,6 @@
 package com.geulowup.backend.domain.user.controller;
 
+import com.geulowup.backend.domain.user.dto.request.SignupRequest;
 import com.geulowup.backend.domain.user.dto.response.CurrentUserInfoResponse;
 import com.geulowup.backend.domain.user.dto.request.UserNicknameUpdateRequest;
 import com.geulowup.backend.domain.user.service.UserService;
@@ -16,6 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<Void> signUp(@AuthenticationPrincipal CustomOAuth2User principal, @RequestBody SignupRequest request) {
+        userService.signUp(principal.getUserId(), request);
+        return ResponseEntity.ok().build();
+    }
 
     @GetMapping("/me")
     public ResponseEntity<CurrentUserInfoResponse> getCurrentUser(@AuthenticationPrincipal CustomOAuth2User principal) {
