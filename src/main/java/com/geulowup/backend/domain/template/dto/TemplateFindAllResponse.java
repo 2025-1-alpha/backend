@@ -7,6 +7,7 @@ import java.util.List;
 
 @Builder
 public record TemplateFindAllResponse(
-        List<TemplateSummary> templates
+        List<TemplateSummary> templates,
+        long totalPage
 ) {
 }

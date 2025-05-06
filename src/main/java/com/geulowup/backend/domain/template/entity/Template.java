@@ -69,4 +69,16 @@ public class Template {
     public boolean isAuthor(Long userId) {
         return author.getId().equals(userId);
     }
+
+    public void addLike() {
+        likeCount++;
+    }
+
+    public void removeLike() {
+        likeCount--;
+
+        if (likeCount <= 0) {
+            likeCount = 0;
+        }
+    }
 }

@@ -8,9 +8,12 @@ import com.geulowup.backend.domain.template.dto.TemplateRequest;
 import com.geulowup.backend.domain.template.dto.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.dto.TemplateSummary;
 import com.geulowup.backend.domain.template.entity.Template;
+import com.geulowup.backend.domain.template.entity.TemplateLike;
+import com.geulowup.backend.domain.template.entity.TemplateLikeId;
 import com.geulowup.backend.domain.template.entity.UserTemplate;
 import com.geulowup.backend.domain.template.entity.UserTemplateHistory;
 import com.geulowup.backend.domain.template.exception.TemplateErrorCode;
+import com.geulowup.backend.domain.template.repository.TemplateLikeRepository;
 import com.geulowup.backend.domain.template.repository.TemplateRepository;
 import com.geulowup.backend.domain.template.repository.UserTemplateRepository;
 import com.geulowup.backend.domain.user.entity.User;
@@ -22,6 +25,9 @@ import com.geulowup.backend.domain.user.repository.UserRepository;
 import com.geulowup.backend.global.exception.ApiException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +40,7 @@ public class TemplateService {
     private final UserFolderRepository userFolderRepository;
     private final UserTemplateRepository userTemplateRepository;
     private final UserHistoryRepository userHistoryRepository;
+    private final TemplateLikeRepository templateLikeRepository;
 
     @Transactional
     public void createTemplate(Long userId, TemplateRequest request) {
@@ -71,14 +78,19 @@ public class TemplateService {
         );
     }
 
-    public TemplateFindAllResponse getAllTemplates() {
-        List<TemplateSummary> templates = templateRepository.findAll()
+    public TemplateFindAllResponse getAllTemplates(String search, String tag, Sort sort) {
+        PageRequest pageRequest = PageRequest.of(0, 10, sort);
+
+        Page<Template> results = templateRepository.findAllByFiltering(search, tag, pageRequest);
+
+        List<TemplateSummary> templates = results
                 .stream()
                 .map(TemplateSummary::from)
                 .toList();
 
         return TemplateFindAllResponse.builder()
                 .templates(templates)
+                .totalPage(results.getTotalPages())
                 .build();
     }
 
@@ -169,5 +181,31 @@ public class TemplateService {
                 .build();
 
         userHistoryRepository.save(history);
+    }
+
+    @Transactional
+    public void likeTemplate(Long userId, Long templateId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+
+        Template template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
+        if (templateLikeRepository.existsByTemplateAndUser(template, user)) {
+
+            template.removeLike();
+            templateLikeRepository.deleteByTemplateAndUser(template, user);
+            return;
+        }
+
+        template.addLike();
+
+        TemplateLike templateLike = TemplateLike.builder()
+                .id(new TemplateLikeId(templateId, userId))
+                .template(template)
+                .user(user)
+                .build();
+
+        templateLikeRepository.save(templateLike);
     }
 }

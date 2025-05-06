@@ -3,9 +3,11 @@ package com.geulowup.backend.domain.template.repository;
 import com.geulowup.backend.domain.template.entity.Template;
 import com.geulowup.backend.domain.user.entity.User;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
+import org.springframework.data.jpa.repository.Query;
 
 public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findTop5ByOrderByLikeCountDesc();
@@ -13,4 +15,7 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findAllByOrderByLikeCountDesc();
 
     List<Template> findAllByAuthorOrderByLikeCountDesc(User author);
+
+    @Query("select t from Template t where t.title LIKE CONCAT('%', :search, '%') and t.keywords LIKE CONCAT('%', :tag, '%')")
+    Page<Template> findAllByFiltering(String search, String tag, Pageable pageable);
 }

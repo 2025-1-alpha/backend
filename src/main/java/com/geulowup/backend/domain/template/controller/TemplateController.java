@@ -8,6 +8,7 @@ import com.geulowup.backend.domain.template.dto.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -47,8 +48,12 @@ public class TemplateController {
     }
 
     @GetMapping
-    public ResponseEntity<TemplateFindAllResponse> getAllTemplates() {
-        return ResponseEntity.ok(templateService.getAllTemplates());
+    public ResponseEntity<TemplateFindAllResponse> getAllTemplates(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String tag,
+            @RequestParam(required = false, defaultValue = "createdAt,desc") Sort sort
+    ) {
+        return ResponseEntity.ok(templateService.getAllTemplates(search, tag, sort));
     }
 
     @GetMapping("/{templateId}")
@@ -73,7 +78,6 @@ public class TemplateController {
         return ResponseEntity.ok(templateService.getTemplateAuthorInfo(templateId));
     }
 
-
     @PostMapping("/{templateId}/save")
     public ResponseEntity<Void> saveTemplate(
             @PathVariable Long templateId,
@@ -84,8 +88,6 @@ public class TemplateController {
         return ResponseEntity.ok().build();
     }
 
-
-
     @PostMapping("/{templateId}/use")
     public ResponseEntity<Void> useTemplate(
             @AuthenticationPrincipal CustomOAuth2User principal,
@@ -93,6 +95,15 @@ public class TemplateController {
     ) {
         Long userId = principal.getUserId();
         templateService.useTemplate(userId, templateId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{templateId}/likes")
+    public ResponseEntity<Void> likeTemplate(
+            @AuthenticationPrincipal CustomOAuth2User principal,
+            @PathVariable Long templateId
+    ) {
+        templateService.likeTemplate(principal.getUserId(), templateId);
         return ResponseEntity.ok().build();
     }
 }
