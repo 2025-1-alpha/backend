@@ -71,6 +71,13 @@ public class TemplateController {
         return ResponseEntity.ok(templateService.getRecommendedTemplates(summary));
     }
 
+    @GetMapping("/me/likes")
+    public ResponseEntity<TemplateFindAllResponse> getLikesTemplates(
+            @AuthenticationPrincipal CustomOAuth2User principal
+    ) {
+        return ResponseEntity.ok(templateService.getLikesTemplates(principal.getUserId()));
+    }
+
     @GetMapping("/{templateId}/authors")
     public ResponseEntity<TemplateAuthorInfoResponse> getTemplateAuthorInfo(
             @PathVariable Long templateId

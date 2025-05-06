@@ -124,6 +124,7 @@ public class TemplateService {
                                 .map(TemplateSummary::from)
                                 .toList()
                 )
+                .totalPage(1)
                 .build();
     }
 
@@ -207,5 +208,23 @@ public class TemplateService {
                 .build();
 
         templateLikeRepository.save(templateLike);
+    }
+
+    public TemplateFindAllResponse getLikesTemplates(Long userId) {
+        List<Template> templates = templateLikeRepository.findAllByUserId(userId)
+                .stream()
+                .map(TemplateLike::getTemplate)
+                .toList();
+
+        List<TemplateSummary> summaries = templates
+                .stream()
+                .map(TemplateSummary::from)
+                .toList();
+
+        return TemplateFindAllResponse
+                .builder()
+                .templates(summaries)
+                .totalPage(1)
+                .build();
     }
 }
