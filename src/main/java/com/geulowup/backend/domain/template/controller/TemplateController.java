@@ -77,10 +77,10 @@ public class TemplateController {
     @PostMapping("/{templateId}/save")
     public ResponseEntity<Void> saveTemplate(
             @PathVariable Long templateId,
-            @RequestParam Long userId,
+            @AuthenticationPrincipal CustomOAuth2User principal,
             @RequestBody TemplateSaveRequest request
     ) {
-        templateService.saveTemplate(userId, templateId, request);
+        templateService.saveTemplate(principal.getUserId(), templateId, request);
         return ResponseEntity.ok().build();
     }
 

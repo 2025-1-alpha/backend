@@ -38,4 +38,8 @@ public class UserTemplateFolder {
 
     @Column(nullable = false)
     private String name;
+
+    public boolean canAccess(User user) {
+        return user.getId().equals(this.user.getId());
+    }
 }

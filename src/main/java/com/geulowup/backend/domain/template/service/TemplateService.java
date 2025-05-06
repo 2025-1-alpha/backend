@@ -142,6 +142,10 @@ public class TemplateService {
         UserTemplateFolder folder = userFolderRepository.findById(request.folderId())
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
+        if (!folder.canAccess(user)) {
+            throw new ApiException(TemplateErrorCode.TEMPLATE_ACCESS_DENIED);
+        }
+
         UserTemplate userTemplate = UserTemplate.builder()
                 .folder(folder)
                 .template(template)
@@ -153,12 +157,15 @@ public class TemplateService {
 
     @Transactional
     public void useTemplate(Long userId, Long templateId) {
-        UserTemplate userTemplate = userTemplateRepository.findByFolderUserIdAndTemplateId(userId, templateId)
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+
+        Template template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
         UserTemplateHistory history = UserTemplateHistory.builder()
-                .user(userTemplate.getUser())
-                .template(userTemplate.getTemplate())
+                .user(user)
+                .template(template)
                 .build();
 
         userHistoryRepository.save(history);
