@@ -5,17 +5,17 @@ import lombok.Builder;
 
 @Builder
 public record AuthorDetail(
-        Long authorId,
-        String authorName,
-        int authorScore,
-        String authorProfileImageUrl
+        Long id,
+        String name,
+        int score,
+        String profileImageUrl
 ) {
     public static AuthorDetail from (User user) {
         return AuthorDetail.builder()
-                .authorId(user.getId())
-                .authorName(user.getName())
-                .authorScore(user.getScore())
-                .authorProfileImageUrl(user.getProfileImageUrl())
+                .id(user.getId())
+                .name(user.getName())
+                .score(user.getScore())
+                .profileImageUrl(user.getProfileImageUrl())
                 .build();
     }
 }
