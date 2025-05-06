@@ -1,10 +1,10 @@
 package com.geulowup.backend.domain.template.controller;
 
-import com.geulowup.backend.domain.template.dto.TemplateAuthorInfoResponse;
-import com.geulowup.backend.domain.template.dto.TemplateDetail;
-import com.geulowup.backend.domain.template.dto.TemplateFindAllResponse;
-import com.geulowup.backend.domain.template.dto.TemplateRequest;
-import com.geulowup.backend.domain.template.dto.TemplateSaveRequest;
+import com.geulowup.backend.domain.template.dto.response.TemplateAuthorInfoResponse;
+import com.geulowup.backend.domain.template.dto.response.TemplateDetail;
+import com.geulowup.backend.domain.template.dto.response.TemplateFindAllResponse;
+import com.geulowup.backend.domain.template.dto.request.TemplateRequest;
+import com.geulowup.backend.domain.template.dto.request.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;

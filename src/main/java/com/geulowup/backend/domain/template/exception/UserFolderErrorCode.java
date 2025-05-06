@@ -1,4 +1,4 @@
-package com.geulowup.backend.domain.user.exception;
+package com.geulowup.backend.domain.template.exception;
 
 import com.geulowup.backend.global.exception.ErrorCode;
 import lombok.AllArgsConstructor;

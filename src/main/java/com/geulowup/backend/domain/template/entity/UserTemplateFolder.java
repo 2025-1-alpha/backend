@@ -1,5 +1,6 @@
-package com.geulowup.backend.domain.user.entity;
+package com.geulowup.backend.domain.template.entity;
 
+import com.geulowup.backend.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -41,5 +42,9 @@ public class UserTemplateFolder {
 
     public boolean canAccess(User user) {
         return user.getId().equals(this.user.getId());
+    }
+
+    public void updateName(String name) {
+        this.name = name;
     }
 }

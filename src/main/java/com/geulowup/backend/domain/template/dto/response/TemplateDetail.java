@@ -1,7 +1,6 @@
-package com.geulowup.backend.domain.template.dto;
+package com.geulowup.backend.domain.template.dto.response;
 
 import com.geulowup.backend.domain.template.entity.Template;
-import com.geulowup.backend.domain.user.entity.User;
 import lombok.Builder;
 
 import java.util.Arrays;

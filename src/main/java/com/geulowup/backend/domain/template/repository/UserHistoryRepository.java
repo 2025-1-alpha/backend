@@ -1,4 +1,4 @@
-package com.geulowup.backend.domain.user.repository;
+package com.geulowup.backend.domain.template.repository;
 
 import com.geulowup.backend.domain.template.entity.UserTemplateHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
