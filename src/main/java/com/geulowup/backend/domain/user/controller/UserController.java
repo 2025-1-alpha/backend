@@ -5,9 +5,11 @@ import com.geulowup.backend.domain.user.dto.request.UserNicknameUpdateRequest;
 import com.geulowup.backend.domain.user.service.UserService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/users")
@@ -23,6 +25,15 @@ public class UserController {
     @PatchMapping("/me/nickname")
     public ResponseEntity<Void> updateNickname(@AuthenticationPrincipal CustomOAuth2User principal, @RequestBody UserNicknameUpdateRequest request) {
         userService.updateNickname(principal.getUserId(), request);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping(value = "/me/profile-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateProfileImage(
+            @AuthenticationPrincipal CustomOAuth2User principal,
+            @RequestPart(required = false) MultipartFile image
+    ) {
+        userService.updateProfileImage(principal.getUserId(), image);
         return ResponseEntity.ok().build();
     }
 }
