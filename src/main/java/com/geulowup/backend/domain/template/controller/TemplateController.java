@@ -6,7 +6,6 @@ import com.geulowup.backend.domain.template.dto.TemplateFindAllResponse;
 import com.geulowup.backend.domain.template.dto.TemplateRequest;
 import com.geulowup.backend.domain.template.dto.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
-import com.geulowup.backend.domain.user.service.UserService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -87,9 +86,13 @@ public class TemplateController {
 
 
 
-    @PostMapping("/templates/{templateId}/use")
-    public ResponseEntity<Void> useTemplate(@PathVariable Long userTemplateId) {
-        templateService.useTemplate(userTemplateId);
+    @PostMapping("/{templateId}/use")
+    public ResponseEntity<Void> useTemplate(
+            @AuthenticationPrincipal CustomOAuth2User principal,
+            @PathVariable Long templateId
+    ) {
+        Long userId = principal.getUserId();
+        templateService.useTemplate(userId, templateId);
         return ResponseEntity.ok().build();
     }
 }

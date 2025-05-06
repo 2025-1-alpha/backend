@@ -152,8 +152,8 @@ public class TemplateService {
 
 
     @Transactional
-    public void useTemplate(Long userTemplateId) {
-        UserTemplate userTemplate = userTemplateRepository.findById(userTemplateId)
+    public void useTemplate(Long userId, Long templateId) {
+        UserTemplate userTemplate = userTemplateRepository.findByFolderUserIdAndTemplateId(userId, templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
         UserTemplateHistory history = UserTemplateHistory.builder()
@@ -162,7 +162,5 @@ public class TemplateService {
                 .build();
 
         userHistoryRepository.save(history);
-
-
     }
 }
