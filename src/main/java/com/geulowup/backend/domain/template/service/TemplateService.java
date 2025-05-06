@@ -5,12 +5,19 @@ import com.geulowup.backend.domain.template.dto.TemplateAuthorInfoResponse;
 import com.geulowup.backend.domain.template.dto.TemplateDetail;
 import com.geulowup.backend.domain.template.dto.TemplateFindAllResponse;
 import com.geulowup.backend.domain.template.dto.TemplateRequest;
+import com.geulowup.backend.domain.template.dto.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.dto.TemplateSummary;
 import com.geulowup.backend.domain.template.entity.Template;
+import com.geulowup.backend.domain.template.entity.UserTemplate;
+import com.geulowup.backend.domain.template.entity.UserTemplateHistory;
 import com.geulowup.backend.domain.template.exception.TemplateErrorCode;
 import com.geulowup.backend.domain.template.repository.TemplateRepository;
+import com.geulowup.backend.domain.template.repository.UserTemplateRepository;
 import com.geulowup.backend.domain.user.entity.User;
+import com.geulowup.backend.domain.user.entity.UserTemplateFolder;
 import com.geulowup.backend.domain.user.exception.UserErrorCode;
+import com.geulowup.backend.domain.user.repository.UserFolderRepository;
+import com.geulowup.backend.domain.user.repository.UserHistoryRepository;
 import com.geulowup.backend.domain.user.repository.UserRepository;
 import com.geulowup.backend.global.exception.ApiException;
 import java.util.List;
@@ -24,6 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class TemplateService {
     private final TemplateRepository templateRepository;
     private final UserRepository userRepository;
+    private final UserFolderRepository userFolderRepository;
+    private final UserTemplateRepository userTemplateRepository;
+    private final UserHistoryRepository userHistoryRepository;
 
     @Transactional
     public void createTemplate(Long userId, TemplateRequest request) {
@@ -120,5 +130,39 @@ public class TemplateService {
                         .toList()
                 )
                 .build();
+    }
+
+
+    @Transactional
+    public void saveTemplate(Long userId, Long templateId, TemplateSaveRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+        Template template = templateRepository.findById(templateId)
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+        UserTemplateFolder folder = userFolderRepository.findById(request.folderId())
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
+        UserTemplate userTemplate = UserTemplate.builder()
+                .folder(folder)
+                .template(template)
+                .build();
+
+        userTemplateRepository.save(userTemplate);
+    }
+
+
+    @Transactional
+    public void useTemplate(Long userTemplateId) {
+        UserTemplate userTemplate = userTemplateRepository.findById(userTemplateId)
+                .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
+        UserTemplateHistory history = UserTemplateHistory.builder()
+                .user(userTemplate.getUser())
+                .template(userTemplate.getTemplate())
+                .build();
+
+        userHistoryRepository.save(history);
+
+
     }
 }

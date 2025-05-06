@@ -4,6 +4,7 @@ import com.geulowup.backend.domain.template.dto.TemplateAuthorInfoResponse;
 import com.geulowup.backend.domain.template.dto.TemplateDetail;
 import com.geulowup.backend.domain.template.dto.TemplateFindAllResponse;
 import com.geulowup.backend.domain.template.dto.TemplateRequest;
+import com.geulowup.backend.domain.template.dto.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.domain.user.service.UserService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
@@ -71,5 +72,24 @@ public class TemplateController {
             @PathVariable Long templateId
     ) {
         return ResponseEntity.ok(templateService.getTemplateAuthorInfo(templateId));
+    }
+
+
+    @PostMapping("/{templateId}/save")
+    public ResponseEntity<Void> saveTemplate(
+            @PathVariable Long templateId,
+            @RequestParam Long userId,
+            @RequestBody TemplateSaveRequest request
+    ) {
+        templateService.saveTemplate(userId, templateId, request);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+    @PostMapping("/templates/{templateId}/use")
+    public ResponseEntity<Void> useTemplate(@PathVariable Long userTemplateId) {
+        templateService.useTemplate(userTemplateId);
+        return ResponseEntity.ok().build();
     }
 }
