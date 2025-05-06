@@ -13,7 +13,7 @@ public record TemplateDetail(
         boolean isAuthor,
         String title,
         String content,
-        List<String> keywords,
+        List<String> tags,
         int likeCount,
         boolean isPrivate
 ) {
@@ -24,7 +24,7 @@ public record TemplateDetail(
                 .title(template.getTitle())
                 .content(template.getContent())
                 .isAuthor(template.isAuthor(userId))
-                .keywords(Arrays.asList(template.getKeywords().split(",")))
+                .tags(Arrays.asList(template.getTags().split(",")))
                 .likeCount(template.getLikeCount())
                 .isPrivate(template.isPrivate())
                 .build();

@@ -49,7 +49,7 @@ public class Template {
     @Column(name = "like_count", nullable = false)
     private Integer likeCount;
 
-    private String keywords;
+    private String tags;
 
     @Column(name = "is_private", nullable = false, columnDefinition = "TINYINT(1)")
     private boolean isPrivate = false;
@@ -58,11 +58,11 @@ public class Template {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public void updateTemplate(String title, String content, int likeCount, List<String> keywords, boolean isPrivate) {
+    public void updateTemplate(String title, String content, int likeCount, List<String> tags, boolean isPrivate) {
         this.title = title;
         this.content = content;
         this.likeCount = likeCount;
-        this.keywords = String.join(",", keywords);
+        this.tags = String.join(",", tags);
         this.isPrivate = isPrivate;
     }
 

@@ -9,7 +9,7 @@ public record TemplateRequest(
         String title,
         String content,
         int likeCount,
-        List<String> keywords,
+        List<String> tags,
         boolean isPrivate
 ) {
 

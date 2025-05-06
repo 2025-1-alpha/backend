@@ -34,7 +34,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .orElseGet(() -> {
                     User newUser = User.builder()
                             .socialId(socialId)
-                            .name(oAuth2User.getName())
                             .email(oAuth2User.getEmail())
                             .socialType(socialType)
                             .score(0)
@@ -43,12 +42,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 });
 
         String accessToken = tokenProvider.generateToken(user, Duration.ofDays(30));
-        getRedirectStrategy().sendRedirect(request, response, getRedirectUrl(loginRedirectUri + "/callback", accessToken));
+        CallbackType type = (user.getName() == null) ? CallbackType.NEW_USER : CallbackType.SUCCESS;
+
+        getRedirectStrategy().sendRedirect(request, response, getRedirectUrl(loginRedirectUri + "/callback", type, accessToken));
     }
 
-    private String getRedirectUrl(String targetUrl, String token) {
+    private String getRedirectUrl(String targetUrl, CallbackType type, String token) {
         return UriComponentsBuilder.fromUriString(targetUrl)
+                .queryParam("type", type)
                 .queryParam("token", token)
                 .build().toUriString();
+    }
+
+    enum CallbackType {
+        SUCCESS, NEW_USER
     }
 }
