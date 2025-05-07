@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/templates")
 @RequiredArgsConstructor
-public class TemplateController {
+public class TemplateController implements TemplateApi {
     private final TemplateService templateService;
 
     @PostMapping
