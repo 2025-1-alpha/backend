@@ -21,9 +21,6 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
-    @Value("${cloud.aws.s3.base-url}")
-    private String baseUrl;
-
     public String uploadFile(MultipartFile file, String newFileName) {
         String originalName = file.getOriginalFilename();
         String ext = originalName.substring(originalName.lastIndexOf("."));

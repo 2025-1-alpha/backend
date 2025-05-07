@@ -16,6 +16,6 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
 
     List<Template> findAllByAuthorOrderByLikeCountDesc(User author);
 
-    @Query("select t from Template t where t.title LIKE CONCAT('%', :search, '%') and t.keywords LIKE CONCAT('%', :tag, '%')")
+    @Query("select t from Template t where t.title LIKE CONCAT('%', :search, '%') and t.tags LIKE CONCAT('%', :tag, '%')")
     Page<Template> findAllByFiltering(String search, String tag, Pageable pageable);
 }

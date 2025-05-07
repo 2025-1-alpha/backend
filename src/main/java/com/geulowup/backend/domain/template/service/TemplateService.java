@@ -54,7 +54,7 @@ public class TemplateService {
                 .content(request.content())
                 .likeCount(request.likeCount())
                 .isPrivate(request.isPrivate())
-                .keywords(String.join(",", request.keywords()))
+                .tags(String.join(",", request.tags()))
                 .build();
 
         templateRepository.save(template);
@@ -73,7 +73,7 @@ public class TemplateService {
                 request.title(),
                 request.content(),
                 request.likeCount(),
-                request.keywords(),
+                request.tags(),
                 request.isPrivate()
         );
     }

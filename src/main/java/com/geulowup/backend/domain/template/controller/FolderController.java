@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/folders")
 @RequiredArgsConstructor
-public class FolderController {
+public class FolderController implements FolderApi {
     private final FolderService folderService;
 
     @PostMapping
