@@ -11,8 +11,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,7 +69,11 @@ public interface TemplateApi {
             @PathVariable Long templateId
     );
 
-    @Operation(summary = "템플릿 전체 조회", description = "모든 템플릿을 조회하는 API (검색어, 태그, 정렬 필터링 가능)\n[최신순: createdAt,desc / 인기순: likeCount,desc]")
+    @Operation(summary = "템플릿 전체 조회", description = "모든 템플릿을 조회하는 API (검색어, 태그, 정렬 필터링 가능)"
+            + "<br />"
+            + "<br />page - 페이지 단위로 잘라서 조회할 때 사용 (0부터 시작)"
+            + "<br />size - 한 페이지 당 불러올 개수"
+            + "<br />sort - [최신순 (기본): createdAt,desc / 인기순: likeCount,desc]")
     @ApiResponses(
             value = {
                     @ApiResponse(
@@ -74,10 +82,11 @@ public interface TemplateApi {
                     )
             }
     )
+    @PageableAsQueryParam
     ResponseEntity<TemplateFindAllResponse> getAllTemplates(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String tag,
-            @SortDefault(sort = "createdAt", direction = Direction.DESC) Sort sort
+            @PageableDefault(sort = "createdAt", direction = Direction.DESC) @ParameterObject Pageable pageable
     );
 
     @Operation(summary = "템플릿 상세 조회", description = "템플릿 상세 내용을 조회하는 API")

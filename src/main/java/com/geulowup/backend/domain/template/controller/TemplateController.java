@@ -8,9 +8,11 @@ import com.geulowup.backend.domain.template.dto.request.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.web.SortDefault;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -53,9 +55,9 @@ public class TemplateController implements TemplateApi {
     public ResponseEntity<TemplateFindAllResponse> getAllTemplates(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String tag,
-            @SortDefault(sort = "createdAt", direction = Direction.DESC) Sort sort
+            @PageableDefault(page = 10, sort  ="createdAt", direction = Direction.DESC) @ParameterObject Pageable pageable
     ) {
-        return ResponseEntity.ok(templateService.getAllTemplates(search, tag, sort));
+        return ResponseEntity.ok(templateService.getAllTemplates(search, tag, pageable));
     }
 
     @GetMapping("/{templateId}")

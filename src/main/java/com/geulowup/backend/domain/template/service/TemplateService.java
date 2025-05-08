@@ -27,6 +27,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -78,10 +79,9 @@ public class TemplateService {
         );
     }
 
-    public TemplateFindAllResponse getAllTemplates(String search, String tag, Sort sort) {
-        PageRequest pageRequest = PageRequest.of(0, 10, sort);
+    public TemplateFindAllResponse getAllTemplates(String search, String tag, Pageable pageable) {
 
-        Page<Template> results = templateRepository.findAllByFiltering(search, tag, pageRequest);
+        Page<Template> results = templateRepository.findAllByFiltering(search, tag, pageable);
 
         List<TemplateSummary> templates = results
                 .stream()
