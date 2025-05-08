@@ -65,7 +65,7 @@ public class TemplateController implements TemplateApi {
             @AuthenticationPrincipal CustomOAuth2User principal,
             @PathVariable Long templateId
     ) {
-        return ResponseEntity.ok(templateService.getTemplateById(Optional.ofNullable(principal.getUserId()), templateId));
+        return ResponseEntity.ok(templateService.getTemplateById((principal != null) ? principal.getUserId() : null, templateId));
     }
 
     @GetMapping("/recommendation")
