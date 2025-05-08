@@ -35,7 +35,6 @@ public class SecurityConfig {
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     private static final String[] SWAGGER_API_PATH = {
-            //swagger
             "/v3/api-docs/**",
             "/api-docs/**",
             "/swagger-ui.html",
@@ -43,8 +42,8 @@ public class SecurityConfig {
     };
 
     private static final String[] GET_WHITELIST_API_PATH = {
-            "/templates/*",
-            "/templates"
+            "/templates",
+            "/templates/*"
     };
 
     @Bean

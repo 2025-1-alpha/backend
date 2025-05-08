@@ -3,6 +3,7 @@ package com.geulowup.backend.domain.template.dto.response;
 import com.geulowup.backend.domain.template.entity.Template;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Optional;
 import lombok.Builder;
 
 import java.util.Arrays;
@@ -49,7 +50,7 @@ public record TemplateDetail(
                 .author(AuthorDetail.from(template.getAuthor()))
                 .title(template.getTitle())
                 .content(template.getContent())
-                .isAuthor(template.isAuthor(userId))
+                .isAuthor(userId != null && template.isAuthor(userId))
                 .tags(Arrays.asList(template.getTags().split(",")))
                 .likeCount(template.getLikeCount())
                 .isPrivate(template.isPrivate())

@@ -7,10 +7,10 @@ import com.geulowup.backend.domain.template.dto.request.TemplateRequest;
 import com.geulowup.backend.domain.template.dto.request.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -65,7 +65,7 @@ public class TemplateController implements TemplateApi {
             @AuthenticationPrincipal CustomOAuth2User principal,
             @PathVariable Long templateId
     ) {
-        return ResponseEntity.ok(templateService.getTemplateById(principal.getUserId(), templateId));
+        return ResponseEntity.ok(templateService.getTemplateById(Optional.ofNullable(principal.getUserId()), templateId));
     }
 
     @GetMapping("/recommendation")
