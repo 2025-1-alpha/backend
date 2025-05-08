@@ -9,6 +9,8 @@ import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -51,7 +53,7 @@ public class TemplateController implements TemplateApi {
     public ResponseEntity<TemplateFindAllResponse> getAllTemplates(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String tag,
-            @RequestParam(required = false, defaultValue = "createdAt,desc") Sort sort
+            @SortDefault(sort = "createdAt", direction = Direction.DESC) Sort sort
     ) {
         return ResponseEntity.ok(templateService.getAllTemplates(search, tag, sort));
     }
