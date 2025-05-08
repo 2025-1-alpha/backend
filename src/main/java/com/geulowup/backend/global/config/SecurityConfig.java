@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -41,6 +42,11 @@ public class SecurityConfig {
             "/swagger-ui/**"
     };
 
+    private static final String[] GET_WHITELIST_API_PATH = {
+            "/templates/*",
+            "/templates"
+    };
+
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter(tokenProvider);
@@ -69,6 +75,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((httpRequests) ->
                         httpRequests
+                                .requestMatchers(HttpMethod.GET, GET_WHITELIST_API_PATH).permitAll()
                                 .requestMatchers(SWAGGER_API_PATH).permitAll()
                                 .anyRequest().authenticated()
                 )
