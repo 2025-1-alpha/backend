@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface TemplateRepository extends JpaRepository<Template, Long> {
     List<Template> findTop5ByOrderByLikeCountDesc();
@@ -16,6 +17,10 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
 
     List<Template> findAllByAuthorOrderByLikeCountDesc(User author);
 
-    @Query("select t from Template t where t.title LIKE CONCAT('%', :search, '%') and t.tags LIKE CONCAT('%', :tag, '%')")
-    Page<Template> findAllByFiltering(String search, String tag, Pageable pageable);
+    @Query("""
+    SELECT t FROM Template t
+    WHERE (:search IS NULL OR t.title LIKE CONCAT('%', :search, '%'))
+    AND (:tag IS NULL OR t.tags LIKE CONCAT('%', :tag, '%'))
+    """)
+    Page<Template> findAllByFiltering(@Param("search") String search, @Param("tag") String tag, Pageable pageable);
 }
