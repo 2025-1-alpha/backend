@@ -26,9 +26,7 @@ import com.geulowup.backend.global.exception.ApiException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +51,6 @@ public class TemplateService {
                 .author(user)
                 .title(request.title())
                 .content(request.content())
-                .likeCount(request.likeCount())
                 .isPrivate(request.isPrivate())
                 .tags(String.join(",", request.tags()))
                 .build();
@@ -73,7 +70,6 @@ public class TemplateService {
         template.updateTemplate(
                 request.title(),
                 request.content(),
-                request.likeCount(),
                 request.tags(),
                 request.isPrivate()
         );

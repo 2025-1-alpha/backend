@@ -58,10 +58,9 @@ public class Template {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    public void updateTemplate(String title, String content, int likeCount, List<String> tags, boolean isPrivate) {
+    public void updateTemplate(String title, String content, List<String> tags, boolean isPrivate) {
         this.title = title;
         this.content = content;
-        this.likeCount = likeCount;
         this.tags = String.join(",", tags);
         this.isPrivate = isPrivate;
     }
