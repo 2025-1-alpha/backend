@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,7 +77,7 @@ public interface TemplateApi {
     ResponseEntity<TemplateFindAllResponse> getAllTemplates(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String tag,
-            @RequestParam(required = false, defaultValue = "createdAt,desc") Sort sort
+            @SortDefault(sort = "createdAt", direction = Direction.DESC) Sort sort
     );
 
     @Operation(summary = "템플릿 상세 조회", description = "템플릿 상세 내용을 조회하는 API")
