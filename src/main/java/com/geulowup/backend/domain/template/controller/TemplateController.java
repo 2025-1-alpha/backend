@@ -7,7 +7,6 @@ import com.geulowup.backend.domain.template.dto.request.TemplateRequest;
 import com.geulowup.backend.domain.template.dto.request.TemplateSaveRequest;
 import com.geulowup.backend.domain.template.service.TemplateService;
 import com.geulowup.backend.global.security.oauth2.dto.CustomOAuth2User;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;

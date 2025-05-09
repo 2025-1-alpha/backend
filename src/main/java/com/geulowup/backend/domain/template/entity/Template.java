@@ -46,8 +46,9 @@ public class Template {
 
     private String content;
 
+    @Builder.Default
     @Column(name = "like_count", nullable = false)
-    private Integer likeCount;
+    private Integer likeCount = 0;
 
     private String tags;
 

@@ -24,8 +24,6 @@ import com.geulowup.backend.domain.template.repository.UserHistoryRepository;
 import com.geulowup.backend.domain.user.repository.UserRepository;
 import com.geulowup.backend.global.exception.ApiException;
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalLong;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,6 +52,7 @@ public class TemplateService {
                 .title(request.title())
                 .content(request.content())
                 .isPrivate(request.isPrivate())
+                .likeCount(0)
                 .tags(String.join(",", request.tags()))
                 .build();
 
