@@ -36,6 +36,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                             .socialId(socialId)
                             .email(oAuth2User.getEmail())
                             .socialType(socialType)
+                            .profileImageUrl("https://github.com/user-attachments/assets/9c948b08-a78b-44cb-b572-f2a934b70c45")
                             .score(0)
                             .build();
                     return userRepository.save(newUser);
