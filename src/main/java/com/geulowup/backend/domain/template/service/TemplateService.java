@@ -13,6 +13,7 @@ import com.geulowup.backend.domain.template.entity.TemplateLikeId;
 import com.geulowup.backend.domain.template.entity.UserTemplate;
 import com.geulowup.backend.domain.template.entity.UserTemplateHistory;
 import com.geulowup.backend.domain.template.exception.TemplateErrorCode;
+import com.geulowup.backend.domain.template.exception.UserFolderErrorCode;
 import com.geulowup.backend.domain.template.repository.TemplateLikeRepository;
 import com.geulowup.backend.domain.template.repository.TemplateRepository;
 import com.geulowup.backend.domain.template.repository.UserTemplateRepository;
@@ -168,7 +169,24 @@ public class TemplateService {
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
         if (!folder.canAccess(user)) {
-            throw new ApiException(TemplateErrorCode.TEMPLATE_ACCESS_DENIED);
+            throw new ApiException(UserFolderErrorCode.FOLDER_ACCESS_DENIED);
+        }
+
+        String content = request.content();
+
+        if (content != null) {
+            Template copiedTemplate = template.createCopyWithNewContent(content);
+
+            templateRepository.save(copiedTemplate);
+
+            UserTemplate userTemplate = UserTemplate.builder()
+                    .folder(folder)
+                    .template(copiedTemplate)
+                    .build();
+
+            userTemplateRepository.save(userTemplate);
+
+            return;
         }
 
         UserTemplate userTemplate = UserTemplate.builder()

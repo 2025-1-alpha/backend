@@ -81,4 +81,16 @@ public class Template {
             likeCount = 0;
         }
     }
+
+    public Template createCopyWithNewContent(String newContent) {
+        return Template.builder()
+                .author(author)
+                .title(title + "_복사본")
+                .content(newContent)
+                .tags(tags)
+                .likeCount(0)
+                .isPrivate(false)
+                .build();
+    }
+
 }
