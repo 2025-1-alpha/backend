@@ -82,6 +82,13 @@ public class TemplateController implements TemplateApi {
         return ResponseEntity.ok(templateService.getLikesTemplates(principal.getUserId()));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<TemplateFindAllResponse> getCurrentUserTemplates(
+            @AuthenticationPrincipal CustomOAuth2User principal
+    ) {
+        return ResponseEntity.ok(templateService.getCurrentUserTemplates(principal.getUserId()));
+    }
+
     @GetMapping("/{templateId}/authors")
     public ResponseEntity<TemplateAuthorInfoResponse> getTemplateAuthorInfo(
             @PathVariable Long templateId

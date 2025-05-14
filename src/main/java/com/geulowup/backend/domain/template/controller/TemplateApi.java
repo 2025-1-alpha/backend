@@ -129,6 +129,19 @@ public interface TemplateApi {
             @AuthenticationPrincipal CustomOAuth2User principal
     );
 
+    @Operation(summary = "내가 작성한 템플릿 조회", description = "내가 작성한 템플릿을 조회하는 API")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "조회 성공"
+                    )
+            }
+    )
+    ResponseEntity<TemplateFindAllResponse> getCurrentUserTemplates(
+            @AuthenticationPrincipal CustomOAuth2User principal
+    );
+
     @Operation(summary = "템플릿 작성자 조회", description = "템플릿 작성자를 조회하는 모달을 위한 API")
     @ApiResponses(
             value = {

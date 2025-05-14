@@ -239,4 +239,22 @@ public class TemplateService {
                 .totalPage(1)
                 .build();
     }
+
+    public TemplateFindAllResponse getCurrentUserTemplates(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+
+        List<Template> currentUserTemplates = templateRepository.findAllByAuthorOrderByLikeCountDesc(user);
+
+        List<TemplateSummary> summaries = currentUserTemplates
+                .stream()
+                .map(TemplateSummary::from)
+                .toList();
+
+        return TemplateFindAllResponse
+                .builder()
+                .templates(summaries)
+                .totalPage(1)
+                .build();
+    }
 }
