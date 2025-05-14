@@ -24,6 +24,7 @@ import com.geulowup.backend.domain.template.repository.UserHistoryRepository;
 import com.geulowup.backend.domain.user.repository.UserRepository;
 import com.geulowup.backend.global.exception.ApiException;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -107,7 +108,21 @@ public class TemplateService {
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
-        return TemplateDetail.from(template, userId);
+        boolean saved = false;
+        UserTemplateFolder savedFolder = null;
+
+        if (userId != null) {
+            Optional<UserTemplate> userTemplateOpt = userTemplateRepository
+                    .findByFolderUserIdAndTemplateId(userId, templateId);
+
+            if (userTemplateOpt.isPresent()) {
+                UserTemplate userTemplate = userTemplateOpt.get();
+                saved = true;
+                savedFolder = userTemplate.getFolder();
+            }
+        }
+
+        return TemplateDetail.from(template, userId, saved, savedFolder);
     }
 
     public TemplateFindAllResponse getRecommendedTemplates(boolean summary) {

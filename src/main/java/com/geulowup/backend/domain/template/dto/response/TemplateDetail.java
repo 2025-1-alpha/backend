@@ -1,6 +1,7 @@
 package com.geulowup.backend.domain.template.dto.response;
 
 import com.geulowup.backend.domain.template.entity.Template;
+import com.geulowup.backend.domain.template.entity.UserTemplateFolder;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Optional;
@@ -41,10 +42,16 @@ public record TemplateDetail(
         @Schema(description = "추천 수", example = "27")
         int likeCount,
 
+        @Schema(description = "사용자가 템플릿을 저장했는지 여부")
+        boolean saved,
+
+        @Schema(description = "사용자가 템플릿을 저장한 폴더")
+        FolderSummary savedFolder,
+
         @Schema(description = "비공개 여부 (true: 비공개, false: 공개)", example = "false")
         boolean isPrivate
 ) {
-    public static TemplateDetail from(Template template, Long userId) {
+    public static TemplateDetail from(Template template, Long userId, boolean saved, UserTemplateFolder savedFolder) {
         return TemplateDetail.builder()
                 .templateId(template.getId())
                 .author(AuthorDetail.from(template.getAuthor()))
@@ -53,6 +60,8 @@ public record TemplateDetail(
                 .isAuthor(userId != null && template.isAuthor(userId))
                 .tags(Arrays.asList(template.getTags().split(",")))
                 .likeCount(template.getLikeCount())
+                .saved(saved)
+                .savedFolder(FolderSummary.from(savedFolder))
                 .isPrivate(template.isPrivate())
                 .build();
     }
