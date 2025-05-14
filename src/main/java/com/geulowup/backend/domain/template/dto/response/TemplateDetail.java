@@ -61,7 +61,7 @@ public record TemplateDetail(
                 .tags(Arrays.asList(template.getTags().split(",")))
                 .likeCount(template.getLikeCount())
                 .saved(saved)
-                .savedFolder(FolderSummary.from(savedFolder))
+                .savedFolder(savedFolder == null ? null : FolderSummary.from(savedFolder))
                 .isPrivate(template.isPrivate())
                 .build();
     }
