@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/models")
 @RequiredArgsConstructor
-public class ModelController {
+public class ModelController implements ModelApi {
     private final ModelService modelService;
 
     @PostMapping("/advices")
