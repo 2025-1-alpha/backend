@@ -1,5 +1,9 @@
 package com.geulowup.backend.global.model;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.geulowup.backend.global.exception.ApiException;
 import io.swagger.v3.core.util.Json;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +45,8 @@ public class GeminiRestClient {
 
     public String generateAdviceContent(String userText, String[] tags) {
         Map<String, Object> requestBody = Map.of(
-                "system_instruction", Map.of("parts", new Object[]{ Map.of("text", systemInstruction) }),
                 "contents", new Object[]{
-                        Map.of("role", "user", "parts", new Object[]{ Map.of("text", getAdvicePrompt(userText, tags)) })
+                        Map.of("role", "user", "parts", new Object[]{ Map.of("text", systemInstruction + getAdvicePrompt(userText, tags)) })
                 },
                 "generationConfig", Map.of("responseMimeType", "text/plain")
         );
@@ -74,7 +77,23 @@ public class GeminiRestClient {
                     .body(String.class);
 
             logRequestAndResponse(userText, requestBody, response);
-            return response;
+
+            String result = null;
+
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonNode = mapper.readTree(response);
+
+                result = jsonNode.get("candidates").get(0)
+                        .get("content")
+                        .get("parts").get(0)
+                        .get("text")
+                        .asText();
+            } catch(JsonProcessingException exception) {
+                throw new ApiException(exception);
+            }
+
+            return result;
 
         } catch (RestClientException e) {
             log.error("[Gemini] API 요청 실패: {}", e.getMessage());
@@ -83,7 +102,7 @@ public class GeminiRestClient {
     }
 
     private String getAdvicePrompt(String userText, String[] tags) {
-        return "다음 [" + String.join(", ", tags) + "] 조건에 맞춰서 원문을 개선 및 확장하여 더 좋은 글을 반환해주세요."
+        return "다음 [" + String.join(", ", tags) + "] 조건에 맞춰서 원문을 개선 및 확장하여 더 좋은 글을 반환해주세요. 맘대로 []로 빈 칸 만들지 말라고 했다."
                 + " 원문: " + userText;
     }
 
