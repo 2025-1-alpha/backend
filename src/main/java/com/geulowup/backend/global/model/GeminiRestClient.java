@@ -46,7 +46,8 @@ public class GeminiRestClient {
     public String generateAdviceContent(String userText, String[] tags) {
         Map<String, Object> requestBody = Map.of(
                 "contents", new Object[]{
-                        Map.of("role", "user", "parts", new Object[]{ Map.of("text", systemInstruction + getAdvicePrompt(userText, tags)) })
+                        Map.of("role", "user", "parts",
+                                new Object[]{Map.of("text", systemInstruction + getAdvicePrompt(userText, tags))})
                 },
                 "generationConfig", Map.of("responseMimeType", "text/plain")
         );
@@ -57,7 +58,7 @@ public class GeminiRestClient {
     public String generatePlaceholderContent(String userText) {
         Map<String, Object> requestBody = Map.of(
                 "contents", new Object[]{
-                        Map.of("role", "user", "parts", new Object[]{ Map.of("text", userText + getPlaceholderPrompt()) })
+                        Map.of("role", "user", "parts", new Object[]{Map.of("text", userText + getPlaceholderPrompt())})
                 },
                 "generationConfig", Map.of("responseMimeType", "text/plain")
         );
@@ -78,7 +79,7 @@ public class GeminiRestClient {
 
             logRequestAndResponse(userText, requestBody, response);
 
-            String result = null;
+            String result;
 
             try {
                 ObjectMapper mapper = new ObjectMapper();
@@ -89,7 +90,7 @@ public class GeminiRestClient {
                         .get("parts").get(0)
                         .get("text")
                         .asText();
-            } catch(JsonProcessingException exception) {
+            } catch (JsonProcessingException exception) {
                 throw new ApiException(exception);
             }
 
@@ -102,8 +103,12 @@ public class GeminiRestClient {
     }
 
     private String getAdvicePrompt(String userText, String[] tags) {
-        return "다음 [" + String.join(", ", tags) + "] 조건에 맞춰서 원문을 개선 및 확장하여 더 좋은 글을 반환해주세요. 맘대로 []로 빈 칸 만들지 말라고 했다."
-                + " 원문: " + userText;
+        return " 다음 [" + String.join(", ", tags) + "] 조건에 맞춰서 원문을 개선하여 더 좋은 글을 반환해주세요. " +
+                "단, **절대로 원문에 없는 정보를 삽입하지 마세요.** " +
+                "특히 이름, 소속, 전공, 날짜, 프로젝트 등 원문에 명시되지 않은 정보는 " +
+                "추측하거나 빈칸으로 처리하지 말고 우회하여 문장을 생성하세요. " +
+                "사용자가 입력하지 않은 항목까지 \"형식적으로 적절하겠다\"고 독단적으로 판단하여 빈칸으로 두지마세요. " +
+                "원문: " + userText;
     }
 
     private String getPlaceholderPrompt() {
