@@ -47,6 +47,10 @@ public class SecurityConfig {
             "/templates/*"
     };
 
+    private static final String[] POST_WHITELIST_API_PATH = {
+            "/models/spell-check",
+    };
+
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {
         return new TokenAuthenticationFilter(tokenProvider);
@@ -76,6 +80,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((httpRequests) ->
                         httpRequests
                                 .requestMatchers(HttpMethod.GET, GET_WHITELIST_API_PATH).permitAll()
+                                .requestMatchers(HttpMethod.POST, POST_WHITELIST_API_PATH).permitAll()
                                 .requestMatchers(SWAGGER_API_PATH).permitAll()
                                 .anyRequest().authenticated()
                 )
