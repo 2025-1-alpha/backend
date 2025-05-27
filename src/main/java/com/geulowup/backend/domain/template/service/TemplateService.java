@@ -281,4 +281,20 @@ public class TemplateService {
                 .totalPage(1)
                 .build();
     }
+
+    public TemplateFindAllResponse getRecentlyUsedTemplates(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+
+        List<UserTemplateHistory> histories = userHistoryRepository.findAllByUserOrderByUsedAtDesc(user);
+
+        List<TemplateSummary> summaries = histories.stream()
+                .map(history -> TemplateSummary.from(history.getTemplate()))
+                .toList();
+
+        return TemplateFindAllResponse.builder()
+                .templates(summaries)
+                .totalPage(1)
+                .build();
+    }
 }

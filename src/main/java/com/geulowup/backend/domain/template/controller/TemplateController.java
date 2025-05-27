@@ -124,4 +124,11 @@ public class TemplateController implements TemplateApi {
         templateService.likeTemplate(principal.getUserId(), templateId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/me/recently-used")
+    public ResponseEntity<TemplateFindAllResponse> getRecentlyUsedTemplates(
+            @AuthenticationPrincipal CustomOAuth2User principal
+    ) {
+        return ResponseEntity.ok(templateService.getRecentlyUsedTemplates(principal.getUserId()));
+    }
 }

@@ -197,4 +197,17 @@ public interface TemplateApi {
             @AuthenticationPrincipal CustomOAuth2User principal,
             @PathVariable Long templateId
     );
+
+    @Operation(summary = "최근 사용한 템플릿 조회", description = "최근 사용한 템플릿 목록을 조회하는 API")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "조회 성공"
+                    )
+            }
+    )
+    ResponseEntity<TemplateFindAllResponse> getRecentlyUsedTemplates(
+            @AuthenticationPrincipal CustomOAuth2User principal
+    );
 }
