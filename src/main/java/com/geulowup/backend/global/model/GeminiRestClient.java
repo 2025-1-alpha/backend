@@ -137,7 +137,7 @@ public class GeminiRestClient {
     }
 
     private String getSpellCheckPrompt() {
-        return "다음 글에서 한국어 맞춤법이 틀린 부분 수정해줘(수정 후 글과, 수정한 부분만 말해줘. 전체 응답에서 ** 이거 쓰지마): ";
+        return "다음 글에서 한국어 맞춤법이 틀린 부분 수정해줘(수정 후 글만 보여줘. 전체 응답에서 ** 이거 쓰지마): ";
     }
 
     private void logRequestAndResponse(String input, Map<String, Object> request, String response) {

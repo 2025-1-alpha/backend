@@ -39,7 +39,6 @@ public class SecurityConfig {
             "/api-docs/**",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/models/**"
     };
 
     private static final String[] GET_WHITELIST_API_PATH = {
