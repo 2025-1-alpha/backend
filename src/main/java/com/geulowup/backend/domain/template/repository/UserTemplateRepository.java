@@ -11,4 +11,6 @@ public interface UserTemplateRepository extends JpaRepository<UserTemplate, Long
     Optional<UserTemplate> findByFolderUserIdAndTemplateId(Long userId, Long templateId);
 
     List<UserTemplate> findAllByFolder(UserTemplateFolder folder);
+
+    boolean existsByFolderUserIdAndTemplateId(Long userId, Long templateId);
 }

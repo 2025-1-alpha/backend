@@ -163,13 +163,19 @@ public class TemplateService {
     public void saveTemplate(Long userId, Long templateId, TemplateSaveRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
+
         Template template = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
+
         UserTemplateFolder folder = userFolderRepository.findById(request.folderId())
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
         if (!folder.canAccess(user)) {
             throw new ApiException(UserFolderErrorCode.FOLDER_ACCESS_DENIED);
+        }
+
+        if (userTemplateRepository.existsByFolderUserIdAndTemplateId(userId, templateId)) {
+            throw new ApiException(UserFolderErrorCode.FOLDER_TEMPLATE_DUPLICATE);
         }
 
         String content = request.content();
