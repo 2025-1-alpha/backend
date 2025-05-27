@@ -41,6 +41,7 @@ public class TokenProvider {
                 .setExpiration(expiry)
                 .setSubject(user.getEmail())
                 .claim("id", user.getId())
+                .claim("name", user.getName())
                 .signWith(createSecretKey(), signatureAlgorithm)
                 .compact();
     }
