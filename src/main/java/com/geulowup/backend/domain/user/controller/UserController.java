@@ -43,5 +43,13 @@ public class UserController implements UserApi {
         userService.updateProfileImage(principal.getUserId(), image);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/me")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal CustomOAuth2User principal) {
+        userService.deleteUser(principal.getUserId());
+
+        return ResponseEntity.ok().build();
+    }
+
 }
 

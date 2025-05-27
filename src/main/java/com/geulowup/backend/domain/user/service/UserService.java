@@ -73,4 +73,11 @@ public class UserService {
 
         user.signUp(request.job(), request.tags());
     }
+
+
+    //회원 탈퇴
+    @Transactional
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
