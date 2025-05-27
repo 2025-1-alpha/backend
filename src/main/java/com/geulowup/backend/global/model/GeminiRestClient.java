@@ -43,6 +43,17 @@ public class GeminiRestClient {
         this.detailUri = String.format("models/%s:generateContent", model);
     }
 
+    public String generateSpellCheckContent(String userText) {
+        Map<String, Object> requestBody = Map.of(
+                "contents", new Object[]{
+                        Map.of("role", "user", "parts", new Object[]{Map.of("text", getSpellCheckPrompt() + userText)})
+                },
+                "generationConfig", Map.of("responseMimeType", "text/plain")
+        );
+
+        return generateContent(userText, requestBody);
+    }
+
     public String generateAdviceContent(String userText, String[] tags) {
         Map<String, Object> requestBody = Map.of(
                 "contents", new Object[]{
@@ -123,6 +134,10 @@ public class GeminiRestClient {
                 4. 원문에서 언급하지 않은 내용은 절대 덧붙이지 마. 수정할 수 있는 건 오직 빈칸뿐이야\s
                 5. 원문의 내용과 표현을 추가/변형/삭제하는 행위를 엄격히 금지함.\s
                 오직 줄글만 반환해줘. 엔터도 포함해서""";
+    }
+
+    private String getSpellCheckPrompt() {
+        return "다음 글에서 한국어 맞춤법이 틀린 부분 수정해줘(수정 후 글과, 수정한 부분만 말해줘. 전체 응답에서 ** 이거 쓰지마): ";
     }
 
     private void logRequestAndResponse(String input, Map<String, Object> request, String response) {

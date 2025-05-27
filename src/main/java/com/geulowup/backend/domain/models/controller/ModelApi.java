@@ -2,6 +2,7 @@ package com.geulowup.backend.domain.models.controller;
 
 import com.geulowup.backend.domain.models.dto.request.ModelAdviceRequest;
 import com.geulowup.backend.domain.models.dto.request.ModelPlaceholderRequest;
+import com.geulowup.backend.domain.models.dto.request.ModelSpellCheckRequest;
 import com.geulowup.backend.domain.models.dto.response.ModelResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,4 +34,15 @@ public interface ModelApi {
             }
     )
     ResponseEntity<ModelResponse> getModelPlaceholderResults(@RequestBody ModelPlaceholderRequest request);
+
+    @Operation(summary = "맞춤법 검사", description = "맞춤법 검사 API")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "맞춤법 검사 성공"
+                    )
+            }
+    )
+    ResponseEntity<ModelResponse> getSpellCheckResults(@RequestBody ModelSpellCheckRequest request);
 }

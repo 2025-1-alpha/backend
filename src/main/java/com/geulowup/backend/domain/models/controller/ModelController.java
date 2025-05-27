@@ -2,6 +2,7 @@ package com.geulowup.backend.domain.models.controller;
 
 import com.geulowup.backend.domain.models.dto.request.ModelAdviceRequest;
 import com.geulowup.backend.domain.models.dto.request.ModelPlaceholderRequest;
+import com.geulowup.backend.domain.models.dto.request.ModelSpellCheckRequest;
 import com.geulowup.backend.domain.models.dto.response.ModelResponse;
 import com.geulowup.backend.domain.models.service.ModelService;
 import lombok.RequiredArgsConstructor;
@@ -27,5 +28,11 @@ public class ModelController implements ModelApi {
     public ResponseEntity<ModelResponse> getModelPlaceholderResults(@RequestBody ModelPlaceholderRequest request) {
 
         return ResponseEntity.ok(modelService.getModelPlaceholderResults(request));
+    }
+
+    @PostMapping("/spell-check")
+    public ResponseEntity<ModelResponse> getSpellCheckResults(@RequestBody ModelSpellCheckRequest request) {
+
+        return ResponseEntity.ok(modelService.getSpellCheckResults(request));
     }
 }

@@ -2,6 +2,7 @@ package com.geulowup.backend.domain.models.service;
 
 import com.geulowup.backend.domain.models.dto.request.ModelAdviceRequest;
 import com.geulowup.backend.domain.models.dto.request.ModelPlaceholderRequest;
+import com.geulowup.backend.domain.models.dto.request.ModelSpellCheckRequest;
 import com.geulowup.backend.domain.models.dto.response.ModelResponse;
 import com.geulowup.backend.global.model.GeminiRestClient;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,14 @@ public class ModelService {
 
     public ModelResponse getModelPlaceholderResults(ModelPlaceholderRequest request) {
         String result = geminiRestClient.generatePlaceholderContent(request.content());
+
+        return ModelResponse.builder()
+                .result(result)
+                .build();
+    }
+
+    public ModelResponse getSpellCheckResults(ModelSpellCheckRequest request) {
+        String result = geminiRestClient.generateSpellCheckContent(request.content());
 
         return ModelResponse.builder()
                 .result(result)
