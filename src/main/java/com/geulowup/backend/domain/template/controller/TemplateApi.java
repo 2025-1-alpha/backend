@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Template", description = "템플릿 API")
 public interface TemplateApi {
-    @Operation(summary = "템플릿 생성", description = "새로운 템플릿을 생성하는 API")
+    @Operation(summary = "새 템플릿 생성", description = "새로운 템플릿을 생성하는 API")
     @ApiResponses(
             value = {
                     @ApiResponse(
