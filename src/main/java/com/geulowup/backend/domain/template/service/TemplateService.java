@@ -144,7 +144,7 @@ public class TemplateService {
     public TemplateAuthorInfoResponse getTemplateAuthorInfo(Long templateId) {
         Template currentTemplate = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
-        List<Template> templates = templateRepository.findAllByAuthorOrderByLikeCountDesc(
+        List<Template> templates = templateRepository.findAllByAuthorOrderByCreatedAtDesc(
                 currentTemplate.getAuthor());
 
         return TemplateAuthorInfoResponse.builder()
@@ -268,7 +268,7 @@ public class TemplateService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
 
-        List<Template> currentUserTemplates = templateRepository.findAllByAuthorOrderByLikeCountDesc(user);
+        List<Template> currentUserTemplates = templateRepository.findAllByAuthorOrderByCreatedAtDesc(user);
 
         List<TemplateSummary> summaries = currentUserTemplates
                 .stream()

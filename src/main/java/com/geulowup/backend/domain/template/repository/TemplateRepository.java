@@ -15,7 +15,7 @@ public interface TemplateRepository extends JpaRepository<Template, Long> {
 
     List<Template> findAllByOrderByLikeCountDesc();
 
-    List<Template> findAllByAuthorOrderByLikeCountDesc(User author);
+    List<Template> findAllByAuthorOrderByCreatedAtDesc(User author);
 
     @Query("""
     SELECT t FROM Template t
