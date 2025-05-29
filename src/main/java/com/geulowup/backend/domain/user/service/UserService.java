@@ -4,12 +4,14 @@ import com.geulowup.backend.domain.user.dto.request.SignupRequest;
 import com.geulowup.backend.domain.user.dto.response.CurrentUserInfoResponse;
 import com.geulowup.backend.domain.user.dto.request.UserNicknameUpdateRequest;
 import com.geulowup.backend.domain.user.entity.User;
+import com.geulowup.backend.domain.user.event.UserSignupEvent;
 import com.geulowup.backend.domain.user.exception.UserErrorCode;
 import com.geulowup.backend.domain.user.repository.UserRepository;
 import com.geulowup.backend.global.exception.ApiException;
 import com.geulowup.backend.global.external.s3.S3Service;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserService {
     private final UserRepository userRepository;
     private final S3Service s3Service;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     //내 정보 조회
@@ -72,6 +75,7 @@ public class UserService {
                 .orElseThrow(() -> new ApiException(UserErrorCode.USER_NOT_FOUND));
 
         user.signUp(request.job(), request.tags());
+        eventPublisher.publishEvent(new UserSignupEvent(user));
     }
 
 
