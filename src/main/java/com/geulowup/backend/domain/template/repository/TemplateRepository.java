@@ -11,11 +11,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TemplateRepository extends JpaRepository<Template, Long> {
-    List<Template> findTop5ByPrivateIsFalseOrderByLikeCountDesc();
+    List<Template> findTop5ByIsPrivateIsFalseOrderByLikeCountDesc();
 
-    List<Template> findAllByPrivateIsFalseOrderByLikeCountDesc();
+    List<Template> findAllByIsPrivateIsFalseOrderByLikeCountDesc();
 
-    List<Template> findAllByAuthorAndPrivateIsFalseOrderByCreatedAtDesc(User author);
+    List<Template> findAllByAuthorAndIsPrivateIsFalseOrderByCreatedAtDesc(User author);
 
     List<Template> findAllByAuthorOrderByCreatedAtDesc(User author);
 

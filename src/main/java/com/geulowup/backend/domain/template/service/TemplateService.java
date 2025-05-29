@@ -133,8 +133,8 @@ public class TemplateService {
     }
 
     public TemplateFindAllResponse getRecommendedTemplates(boolean summary) {
-        List<Template> templates = (summary) ? templateRepository.findTop5ByPrivateIsFalseOrderByLikeCountDesc()
-                : templateRepository.findAllByPrivateIsFalseOrderByLikeCountDesc();
+        List<Template> templates = (summary) ? templateRepository.findTop5ByIsPrivateIsFalseOrderByLikeCountDesc()
+                : templateRepository.findAllByIsPrivateIsFalseOrderByLikeCountDesc();
 
         return TemplateFindAllResponse
                 .builder()
@@ -150,7 +150,7 @@ public class TemplateService {
     public TemplateAuthorInfoResponse getTemplateAuthorInfo(Long templateId) {
         Template currentTemplate = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
-        List<Template> templates = templateRepository.findAllByAuthorAndPrivateIsFalseOrderByCreatedAtDesc(
+        List<Template> templates = templateRepository.findAllByAuthorAndIsPrivateIsFalseOrderByCreatedAtDesc(
                 currentTemplate.getAuthor());
 
         return TemplateAuthorInfoResponse.builder()
