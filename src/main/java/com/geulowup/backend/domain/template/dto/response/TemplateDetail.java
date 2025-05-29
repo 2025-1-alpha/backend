@@ -49,9 +49,12 @@ public record TemplateDetail(
         FolderSummary savedFolder,
 
         @Schema(description = "비공개 여부 (true: 비공개, false: 공개)", example = "false")
-        boolean isPrivate
+        boolean isPrivate,
+
+        @Schema(description = "사용자가 좋아요 눌렀는지 여부", example = "false")
+        boolean hasLiked
 ) {
-    public static TemplateDetail from(Template template, Long userId, boolean saved, UserTemplateFolder savedFolder) {
+    public static TemplateDetail from(Template template, Long userId, boolean saved, UserTemplateFolder savedFolder, boolean hasLiked) {
         return TemplateDetail.builder()
                 .templateId(template.getId())
                 .author(AuthorDetail.from(template.getAuthor()))
@@ -63,6 +66,7 @@ public record TemplateDetail(
                 .saved(saved)
                 .savedFolder(savedFolder == null ? null : FolderSummary.from(savedFolder))
                 .isPrivate(template.isPrivate())
+                .hasLiked(hasLiked)
                 .build();
     }
 }

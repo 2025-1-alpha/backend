@@ -110,9 +110,11 @@ public class TemplateService {
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
 
         boolean saved = false;
+        boolean hasLiked = false;
         UserTemplateFolder savedFolder = null;
 
         if (userId != null) {
+            hasLiked = templateLikeRepository.existsByTemplateIdAndUserId(templateId, userId);
             Optional<UserTemplate> userTemplateOpt = userTemplateRepository
                     .findByFolderUserIdAndTemplateId(userId, templateId);
 
@@ -123,7 +125,7 @@ public class TemplateService {
             }
         }
 
-        return TemplateDetail.from(template, userId, saved, savedFolder);
+        return TemplateDetail.from(template, userId, saved, savedFolder, hasLiked);
     }
 
     public TemplateFindAllResponse getRecommendedTemplates(boolean summary) {

@@ -10,6 +10,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface TemplateLikeRepository extends JpaRepository<TemplateLike, TemplateLikeId> {
     boolean existsByTemplateAndUser(Template template, User user);
 
+    boolean existsByTemplateIdAndUserId(Long templateId, Long userId);
+
     void deleteByTemplateAndUser(Template template, User user);
 
     List<TemplateLike> findAllByUserId(Long userId);
