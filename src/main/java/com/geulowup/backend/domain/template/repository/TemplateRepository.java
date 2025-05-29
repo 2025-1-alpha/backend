@@ -11,15 +11,18 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface TemplateRepository extends JpaRepository<Template, Long> {
-    List<Template> findTop5ByOrderByLikeCountDesc();
+    List<Template> findTop5ByPrivateIsFalseOrderByLikeCountDesc();
 
-    List<Template> findAllByOrderByLikeCountDesc();
+    List<Template> findAllByPrivateIsFalseOrderByLikeCountDesc();
+
+    List<Template> findAllByAuthorAndPrivateIsFalseOrderByCreatedAtDesc(User author);
 
     List<Template> findAllByAuthorOrderByCreatedAtDesc(User author);
 
     @Query("""
     SELECT t FROM Template t
     WHERE (:search IS NULL OR t.title LIKE CONCAT('%', :search, '%'))
+    AND (t.isPrivate IS FALSE)
     AND (:tag IS NULL OR t.tags LIKE CONCAT('%', :tag, '%'))
     """)
     Page<Template> findAllByFiltering(@Param("search") String search, @Param("tag") String tag, Pageable pageable);

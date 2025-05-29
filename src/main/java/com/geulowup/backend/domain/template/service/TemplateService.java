@@ -114,6 +114,10 @@ public class TemplateService {
         UserTemplateFolder savedFolder = null;
 
         if (userId != null) {
+            if (template.isPrivate() && !template.isAuthor(userId)) {
+                throw new ApiException(TemplateErrorCode.TEMPLATE_ACCESS_DENIED);
+            }
+
             hasLiked = templateLikeRepository.existsByTemplateIdAndUserId(templateId, userId);
             Optional<UserTemplate> userTemplateOpt = userTemplateRepository
                     .findByFolderUserIdAndTemplateId(userId, templateId);
@@ -129,8 +133,8 @@ public class TemplateService {
     }
 
     public TemplateFindAllResponse getRecommendedTemplates(boolean summary) {
-        List<Template> templates = (summary) ? templateRepository.findTop5ByOrderByLikeCountDesc()
-                : templateRepository.findAllByOrderByLikeCountDesc();
+        List<Template> templates = (summary) ? templateRepository.findTop5ByPrivateIsFalseOrderByLikeCountDesc()
+                : templateRepository.findAllByPrivateIsFalseOrderByLikeCountDesc();
 
         return TemplateFindAllResponse
                 .builder()
@@ -146,7 +150,7 @@ public class TemplateService {
     public TemplateAuthorInfoResponse getTemplateAuthorInfo(Long templateId) {
         Template currentTemplate = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ApiException(TemplateErrorCode.TEMPLATE_NOT_FOUND));
-        List<Template> templates = templateRepository.findAllByAuthorOrderByCreatedAtDesc(
+        List<Template> templates = templateRepository.findAllByAuthorAndPrivateIsFalseOrderByCreatedAtDesc(
                 currentTemplate.getAuthor());
 
         return TemplateAuthorInfoResponse.builder()
