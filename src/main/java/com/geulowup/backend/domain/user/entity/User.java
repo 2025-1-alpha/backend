@@ -58,7 +58,7 @@ public class User {
     private String tags;
 
     @Column(nullable = false)
-    private Integer score;
+    private Double score;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false)

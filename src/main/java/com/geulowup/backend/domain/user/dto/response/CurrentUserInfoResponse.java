@@ -21,8 +21,8 @@ public record CurrentUserInfoResponse(
         @Schema(description = "프로필 이미지 URL", example = "https://example.com/images/profile.jpg")
         String profileImageUrl,
 
-        @Schema(description = "글로우 점수", example = "10")
-        Integer score,
+        @Schema(description = "글로우 온도", example = "10.5")
+        Double score,
 
         @Schema(description = "가입 일시 (ISO 8601 형식)", example = "2025-05-07T14:23:45")
         LocalDateTime createdAt

@@ -12,8 +12,8 @@ public record AuthorDetail(
         @Schema(description = "작성자 이름", example = "홍길동")
         String name,
 
-        @Schema(description = "작성자 점수", example = "85")
-        int score,
+        @Schema(description = "작성자 점수", example = "85.5")
+        Double score,
 
         @Schema(description = "작성자 프로필 이미지 URL", example = "https://example.com/images/profile.jpg")
         String profileImageUrl
