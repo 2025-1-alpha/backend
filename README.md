@@ -46,8 +46,8 @@ MZ 세대는 숏폼 콘텐츠와 줄임말 사용으로 글쓰기와 문해력�
 
 ## ✨ 팀원 소개
    <div align="center">
-     
-| <img src="https://avatars.githubusercontent.com/u/66528589" width="200" alt="프로필사진"> | <img src="https://avatars.githubusercontent.com/u/166782530?v=4" width="200" alt="프로필사진"> |
+
+| ![장민우님 3545 복사본](https://github.com/user-attachments/assets/1fd5341f-843a-423d-850e-59b4ea58c020) | <img src="https://avatars.githubusercontent.com/u/166782530?v=4" width="200" alt="프로필사진"> |
 | :-------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------: |
 |                            <div align = "center"><b>장민우</b></div>                            |                            <div align = "center"><b>황수민</b></div>                            |
 |                            [@alsdn4956](https://github.com/alsdn4956)                             |                        [@tnals0924](https://github.com/tnals0924)                         |
